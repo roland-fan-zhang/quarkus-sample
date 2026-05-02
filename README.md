@@ -4,6 +4,17 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## Setup Sakila sample database 
+
+```shell script
+docker run -d --name sakila -p 3306:3306 sakiladb/mysql
+```
+
+- url : `jdbc:mysql://localhost:3306/sakila`
+- database : `sakila`
+- username : `sakila`
+- password : `p_ssW0rd`
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
