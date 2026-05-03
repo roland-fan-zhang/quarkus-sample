@@ -4,10 +4,16 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## Prerequisites
+
+- Java 25+
+- MySQL 8.x
+- Maven 3.9.x
+
 ## Setup Sakila sample database 
 
 ```shell script
-docker run -d --name sakila -p 3306:3306 sakiladb/mysql
+docker run -d --name sakila -p 3306:3306 sakiladb/mysql:8
 ```
 
 - url : `jdbc:mysql://localhost:3306/sakila`
