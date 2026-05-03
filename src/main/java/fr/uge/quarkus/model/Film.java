@@ -16,6 +16,11 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "film")
 public class Film extends PanacheEntityBase {
 
+  public static final byte DEFAULT_RENTAL_DURATION = 3;
+  public static final BigDecimal DEFAULT_RENTAL_RATE = new BigDecimal("4.99");
+  public static final BigDecimal DEFAULT_REPLACEMENT_COST = new BigDecimal("19.99");
+  public static final String DEFAULT_RATING = "G";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "film_id", columnDefinition = "smallint UNSIGNED not null")
@@ -29,6 +34,9 @@ public class Film extends PanacheEntityBase {
 
   @Column(name = "release_year", columnDefinition = "year")
   private Short releaseYear;
+
+  @Column(name = "language_id", columnDefinition = "tinyint UNSIGNED not null")
+  private Short languageId;
 
   @ColumnDefault("'3'")
   @Column(name = "rental_duration", columnDefinition = "tinyint UNSIGNED not null")
@@ -86,6 +94,14 @@ public class Film extends PanacheEntityBase {
 
   public void setReleaseYear(Short releaseYear) {
     this.releaseYear = releaseYear;
+  }
+
+  public Short getLanguageId() {
+    return languageId;
+  }
+
+  public void setLanguageId(Short languageId) {
+    this.languageId = languageId;
   }
 
   public Byte getRentalDuration() {
