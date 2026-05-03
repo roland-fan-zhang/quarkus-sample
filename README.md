@@ -13,13 +13,28 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 ## Setup Sakila sample database 
 
 ```shell script
-docker run -d --name sakila -p 3306:3306 sakiladb/mysql:8
+docker run -d --name sakila -p 3306:3306 sakiladb/mysql
 ```
 
 - url : `jdbc:mysql://localhost:3306/sakila`
 - database : `sakila`
 - username : `sakila`
 - password : `p_ssW0rd`
+
+## Running with Docker Compose
+
+Build and start the application with its MySQL database:
+
+```shell script
+./mvnw package && docker compose up
+```
+
+The API will be available at <http://localhost:8080>.
+To rebuild the app image after a code change:
+
+```shell script
+./mvnw package && docker compose up --build
+```
 
 ## Running the application in dev mode
 

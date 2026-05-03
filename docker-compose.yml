@@ -1,0 +1,27 @@
+services:
+  db:
+    image: sakiladb/mysql
+    environment:
+      MYSQL_USER: sakila
+      MYSQL_PASSWORD: p_ssW0rd
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "sakila", "-pp_ssW0rd"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - "8080:8080"
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://db:3306/sakila
+      QUARKUS_DATASOURCE_USERNAME: sakila
+      QUARKUS_DATASOURCE_PASSWORD: p_ssW0rd
+    depends_on:
+      db:
+        condition: service_healthy
