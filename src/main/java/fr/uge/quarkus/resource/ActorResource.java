@@ -3,6 +3,7 @@ package fr.uge.quarkus.resource;
 import fr.uge.quarkus.dto.ActorRequest;
 import fr.uge.quarkus.dto.ActorResponse;
 import fr.uge.quarkus.model.Actor;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -33,6 +34,7 @@ import java.util.Optional;
 public class ActorResource {
 
   @GET
+  @Operation(summary = "List all actors with pagination")
   public List<ActorResponse> list(@QueryParam("page") @DefaultValue("0") @Min(0) int page,
                                   @QueryParam("size") @DefaultValue("20") @Positive @Max(100) int size) {
     List<Actor> actors = Actor.findAll().page(page, size).list();
@@ -40,6 +42,7 @@ public class ActorResource {
   }
 
   @GET @Path("/{id}")
+  @Operation(summary = "Get an actor by ID")
   public ActorResponse get(@PathParam("id") int id) {
     Optional<Actor> actor = Actor.findByIdOptional(id);
     return ActorResponse.from(actor.orElseThrow(NotFoundException::new));
@@ -47,6 +50,7 @@ public class ActorResource {
 
   @POST
   @Transactional
+  @Operation(summary = "Create a new actor")
   public Response create(@Valid ActorRequest dto, @Context UriInfo uriInfo) {
     var actor = new Actor();
     actor.setFirstName(dto.firstName());
@@ -58,6 +62,7 @@ public class ActorResource {
 
   @PUT @Path("/{id}")
   @Transactional
+  @Operation(summary = "Update an existing actor")
   public ActorResponse update(@PathParam("id") int id, @Valid ActorRequest dto) {
     Optional<Actor> opt = Actor.findByIdOptional(id);
     var actor = opt.orElseThrow(NotFoundException::new);
@@ -69,6 +74,7 @@ public class ActorResource {
 
   @DELETE @Path("/{id}")
   @Transactional
+  @Operation(summary = "Delete an actor by ID")
   public Response delete(@PathParam("id") int id) {
     Optional<Actor> opt = Actor.findByIdOptional(id);
     opt.orElseThrow(NotFoundException::new).delete();

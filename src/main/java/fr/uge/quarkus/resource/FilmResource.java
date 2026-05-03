@@ -3,6 +3,7 @@ package fr.uge.quarkus.resource;
 import fr.uge.quarkus.dto.FilmRequest;
 import fr.uge.quarkus.dto.FilmResponse;
 import fr.uge.quarkus.model.Film;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -33,6 +34,7 @@ import java.util.Optional;
 public class FilmResource {
 
   @GET
+  @Operation(summary = "List all films with pagination")
   public List<FilmResponse> list(@QueryParam("page") @DefaultValue("0") @Min(0) int page,
                                  @QueryParam("size") @DefaultValue("20") @Positive @Max(100) int size) {
     List<Film> films = Film.findAll().page(page, size).list();
@@ -40,6 +42,7 @@ public class FilmResource {
   }
 
   @GET @Path("/{id}")
+  @Operation(summary = "Get a film by ID")
   public FilmResponse get(@PathParam("id") int id) {
     Optional<Film> film = Film.findByIdOptional(id);
     return FilmResponse.from(film.orElseThrow(NotFoundException::new));
@@ -47,18 +50,10 @@ public class FilmResource {
 
   @POST
   @Transactional
+  @Operation(summary = "Create a new film")
   public Response create(@Valid FilmRequest dto, @Context UriInfo uriInfo) {
     var film = new Film();
-    film.setTitle(dto.title());
-    film.setDescription(dto.description());
-    film.setReleaseYear(dto.releaseYear());
-    film.setLanguageId(dto.languageId());
-    film.setRentalDuration(dto.rentalDuration() != null ? dto.rentalDuration() : Film.DEFAULT_RENTAL_DURATION);
-    film.setRentalRate(dto.rentalRate() != null ? dto.rentalRate() : Film.DEFAULT_RENTAL_RATE);
-    film.setLength(dto.length());
-    film.setReplacementCost(dto.replacementCost() != null ? dto.replacementCost() : Film.DEFAULT_REPLACEMENT_COST);
-    film.setRating(dto.rating() != null ? dto.rating() : Film.DEFAULT_RATING);
-    film.setSpecialFeatures(dto.specialFeatures());
+    applyRequest(film, dto);
     film.persist();
     var uri = uriInfo.getAbsolutePathBuilder().path(film.getId().toString()).build();
     return Response.created(uri).entity(FilmResponse.from(film)).build();
@@ -66,9 +61,24 @@ public class FilmResource {
 
   @PUT @Path("/{id}")
   @Transactional
+  @Operation(summary = "Update an existing film")
   public FilmResponse update(@PathParam("id") int id, @Valid FilmRequest dto) {
+    var film = Film.<Film>findByIdOptional(id).orElseThrow(NotFoundException::new);
+    applyRequest(film, dto);
+    film.setLastUpdate(Instant.now());
+    return FilmResponse.from(film);
+  }
+
+  @DELETE @Path("/{id}")
+  @Transactional
+  @Operation(summary = "Delete a film by ID")
+  public Response delete(@PathParam("id") int id) {
     Optional<Film> opt = Film.findByIdOptional(id);
-    var film = opt.orElseThrow(NotFoundException::new);
+    opt.orElseThrow(NotFoundException::new).delete();
+    return Response.noContent().build();
+  }
+
+  private void applyRequest(Film film, FilmRequest dto) {
     film.setTitle(dto.title());
     film.setDescription(dto.description());
     film.setReleaseYear(dto.releaseYear());
@@ -79,15 +89,5 @@ public class FilmResource {
     film.setReplacementCost(dto.replacementCost() != null ? dto.replacementCost() : Film.DEFAULT_REPLACEMENT_COST);
     film.setRating(dto.rating() != null ? dto.rating() : Film.DEFAULT_RATING);
     film.setSpecialFeatures(dto.specialFeatures());
-    film.setLastUpdate(Instant.now());
-    return FilmResponse.from(film);
-  }
-
-  @DELETE @Path("/{id}")
-  @Transactional
-  public Response delete(@PathParam("id") int id) {
-    Optional<Film> opt = Film.findByIdOptional(id);
-    opt.orElseThrow(NotFoundException::new).delete();
-    return Response.noContent().build();
   }
 }
