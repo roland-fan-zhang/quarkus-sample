@@ -36,6 +36,32 @@ To rebuild the app image after a code change:
 ./mvnw package && docker compose up --build
 ```
 
+## Running as a standalone Docker container
+
+First start the Sakila database if not already running:
+
+```shell script
+docker run -d --name sakila -p 3306:3306 sakiladb/mysql
+```
+
+**JVM mode**
+
+```shell script
+./mvnw package
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus-sample-jvm .
+docker run -i -p 8080:8080 -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://host.docker.internal:3306/sakila -e QUARKUS_DATASOURCE_USERNAME=sakila -e QUARKUS_DATASOURCE_PASSWORD=p_ssW0rd quarkus-sample-jvm
+```
+
+**Native mode**
+
+```shell script
+./mvnw package -Dnative -Dquarkus.native.container-build=true
+docker build -f src/main/docker/Dockerfile.native-micro -t quarkus-sample-native .
+docker run -i -p 8080:8080 -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://host.docker.internal:3306/sakila -e QUARKUS_DATASOURCE_USERNAME=sakila -e QUARKUS_DATASOURCE_PASSWORD=p_ssW0rd quarkus-sample-native
+```
+
+The API will be available at <http://localhost:8080>.
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
