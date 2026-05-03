@@ -1,0 +1,36 @@
+@id = 201
+@page = 0
+@size = 10
+
+### Retrieve actor by id
+GET http://localhost:8080/actors/{{id}}
+Content-Type: application/json
+
+### List actors with default value
+GET http://localhost:8080/actors
+Content-Type: application/json
+
+### List actors
+GET http://localhost:8080/actors?page={{page}}&size={{size}}
+Content-Type: application/json
+
+### Create actor
+POST http://localhost:8080/actors
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe"
+}
+
+### Update actor
+PUT http://localhost:8080/actors/{{id}}
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe"
+}
+
+### Delete actor
+DELETE http://localhost:8080/actors/{{id}}
