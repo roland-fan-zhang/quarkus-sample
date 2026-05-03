@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "film")
@@ -51,7 +52,7 @@ public class Film extends PanacheEntityBase {
   @Column(name = "special_features", columnDefinition = "tinytext")
   private String specialFeatures;
 
-  @ColumnDefault("CURRENT_TIMESTAMP")
+  @CreationTimestamp
   @Column(name = "last_update", nullable = false)
   private Instant lastUpdate;
 

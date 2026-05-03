@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "actor")
@@ -25,7 +25,7 @@ public class Actor extends PanacheEntityBase {
   @Column(name = "last_name", nullable = false, length = 45)
   private String lastName;
 
-  @ColumnDefault("CURRENT_TIMESTAMP")
+  @CreationTimestamp
   @Column(name = "last_update", nullable = false)
   private Instant lastUpdate;
 
