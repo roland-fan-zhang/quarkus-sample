@@ -1,0 +1,50 @@
+@id = 1001
+@page = 0
+@size = 3
+
+### Retrieve film by id
+GET http://localhost:8080/films/{{id}}
+Content-Type: application/json
+
+### List films with default values
+GET http://localhost:8080/films
+Content-Type: application/json
+
+### List films
+GET http://localhost:8080/films?page={{page}}&size={{size}}
+Content-Type: application/json
+
+### Create film
+POST http://localhost:8080/films
+Content-Type: application/json
+
+{
+  "title": "The Matrix",
+  "description": "A computer hacker learns about the true nature of reality.",
+  "releaseYear": 1999,
+  "languageId": 1,
+  "rentalDuration": 3,
+  "rentalRate": 4.99,
+  "length": 136,
+  "replacementCost": 19.99,
+  "rating": "R"
+}
+
+### Update film
+PUT http://localhost:8080/films/{{id}}
+Content-Type: application/json
+
+{
+  "title": "The Matrix Reloaded",
+  "description": "Neo and the rebel leaders estimate that they have 72 hours.",
+  "releaseYear": 2003,
+  "languageId": 1,
+  "rentalDuration": 5,
+  "rentalRate": 2.99,
+  "length": 138,
+  "replacementCost": 14.99,
+  "rating": "R"
+}
+
+### Delete film
+DELETE http://localhost:8080/films/{{id}}
