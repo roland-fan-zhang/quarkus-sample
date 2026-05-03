@@ -36,7 +36,7 @@ public class Film extends PanacheEntityBase {
   private Short releaseYear;
 
   @Column(name = "language_id", columnDefinition = "tinyint UNSIGNED not null")
-  private Short languageId;
+  private Byte languageId;
 
   @ColumnDefault("'3'")
   @Column(name = "rental_duration", columnDefinition = "tinyint UNSIGNED not null")
@@ -96,11 +96,11 @@ public class Film extends PanacheEntityBase {
     this.releaseYear = releaseYear;
   }
 
-  public Short getLanguageId() {
+  public Byte getLanguageId() {
     return languageId;
   }
 
-  public void setLanguageId(Short languageId) {
+  public void setLanguageId(Byte languageId) {
     this.languageId = languageId;
   }
 
