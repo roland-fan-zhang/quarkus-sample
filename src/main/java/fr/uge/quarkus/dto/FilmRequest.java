@@ -10,7 +10,7 @@ public record FilmRequest(
     @NotBlank @Size(max = 128) String title,
     String description,
     Short releaseYear,
-    @NotNull Short languageId,
+    @NotNull Byte languageId,
     Byte rentalDuration,
     @Positive BigDecimal rentalRate,
     Short length,
